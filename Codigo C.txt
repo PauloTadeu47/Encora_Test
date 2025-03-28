@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+// Função que gera e imprime todos os subconjuntos de A com n elementos,
+// organizando a saída do maior subconjunto até o vazio.
+void getSubSets(int *A, int n) {
+    int total = 1 << n; // Calcula o total de subconjuntos: 2^n
+
+    // Percorre os possíveis tamanhos de subconjunto (do maior para o menor)
+    for (int tam = n; tam >= 0; tam--) {
+        // Para cada combinação possível de("bit" '1') numeros (de 0 até 2^n - 1)
+        for (int i = 0; i < total; i++) {
+
+            // Conta quantos,("bit" '1') numeros estão ativados em i (tamanho do subconjunto)
+            int count = 0;
+            int temp = i;
+            while (temp) {
+                temp &= (temp - 1); // Remove o ("bit" '1') numero menos significativo no momento
+                count++;
+            }
+
+            // Se o subconjunto gerado tiver o tamanho esperado, imprime
+            if (count == tam) {
+                printf("[");
+                int aux = 1; // Controle para vírgula entre os números
+
+                // Percorre os ,("bits" '1'), numeros  de i para saber quais numeros incluir
+                for (int j = 0; j < n; j++) {
+                    if (i & (1 << j)) {
+                        if (aux  == 0) printf(","); // Coloca vírgula se necessário
+                        printf("%d", A[j]); // Imprime o numero correspondente
+                        aux = 0;
+                    }
+                }
+                printf("]\n"); // Fecha o subconjunto
+            }
+        }
+    }
+}
+
+int main() {
+    int A[] = {1, 2, 3}; // Conjunto de entrada
+    int n = 3; // Número de elementos do conjunto
+
+    getSubSets(A, n); // Gera todos os subconjuntos
+
+    return 0;
+}
